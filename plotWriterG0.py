@@ -1,4 +1,5 @@
 import math
+import random
 
 
 def qo(label,attribute):
@@ -166,28 +167,57 @@ def handleOdd(xStart,yStart,xEnd,yEnd):
     #     print("handle odd y is greater")
     #     return
 #  arranges the nodelist to avoid the 'bent' look of all the long segments being on one side
-def arrangeNodeList(nodeList):
+def arrangeNodeListB(nodeList):
+    print("nodelist",nodeList)
+    return nodeList ###### temporary
     listA=[]
     listB=[]
     for item in nodeList:
         listA.append(item)
         listB.append(nodeList.pop())
     combinedArrangedList = []
+    #listA.reverse()
+
     for i in range(len(listA)):
         combinedArrangedList.append(listA[i])
         combinedArrangedList.append(listB[i])
     return combinedArrangedList
 
 
+def superAppend(list,entry):
+    for i in range(len(list)):
+        if list[i]>entry:
+            list[i]+=1
+        list.append(entry)
+        return list
+
+def arrangeNodeList(nodeList):
+
+
+    random.shuffle(nodeList)
+
+
+    return nodeList
+
+def incrementNodes(nodeList,index):
+    for node in nodeList:
+        if node > index:
+            node += 1
+    return nodeList
+
 def stretchXAxis(xPlot,yPlot,stretch):
 
     initialValue = yPlot[0]
+    print("stretchXisRunning")
     nodeList = []
     for i in range(len(yPlot)):
         if yPlot[i] != initialValue:
             nodeList.append(i)
             initialValue=yPlot[i]
     arrangedList=arrangeNodeList(nodeList)
+
+    # arrangedList.reverse()
+    print("arrangedList",arrangedList) # remember to possibly reverse this list
     while (stretch > 0):
         insertIndex=arrangedList.pop()
         # print("insertIndex",insertIndex)
@@ -211,7 +241,9 @@ def stretchYAxis(xPlot,yPlot,stretch):
     # print("Nodelist",nodeList)
 
     arrangedList=arrangeNodeList(nodeList)
-    # print("arrangedList",arrangedList)
+    # arrangedList.reverse()
+    ## **
+    print("arrangedList",arrangedList)
     while (stretch > 0):
         insertIndex=arrangedList.pop()
         # print("insertIndex",insertIndex)
@@ -227,14 +259,21 @@ def incrementAxis(plot,index):
     # print("incrementor")
     incrementor = plot[1] - plot [0]
     # print("incrementor",incrementor)
-    currentValue = plot[index]
-    newValue = plot[index]+incrementor
+    # print("incrementor",incrementor)
+    currentValue = plot[index-1]
+    # print("currentValue",currentValue)
+    # print("index",index)
+    newValue = currentValue+incrementor
+    # print("newValue",newValue)
     plot.insert(index,newValue)
-    for i in range(index,len(plot),1):
+    ### made some changes here
+    for i in range(index+1,len(plot),1):
         currentValue = plot[i]
         newValue = currentValue + incrementor
         plot[i]=newValue
+    # print(plot)
     return plot
+
 ## use three different handles as 'middleware' between plotline and the respective mechanisms
 def plotLine(xStart,yStart,xEnd,yEnd):
     outPlotX=[]
@@ -257,13 +296,13 @@ def plotLine(xStart,yStart,xEnd,yEnd):
         return [outPlotX,outPlotY]
 # inc represents how many of this axis to how many of the other
 # plot0x,plot0y=plotEven(50,50,1,1,25)
-plot0x,plot0y=plotLine(50,50,75,103)
+plot0x,plot0y=plotLine(50,50,75,75)
 # startX,startY,endX,endY,stretchX,stretchY=getClosestWithStretch(50,50,76,75)
 # plot0x,plot0y=stretchYAxis(plot0x,plot0y,3)
 # stretchYAxis(plot0x,plot0y,10)
 # stretchXAxis(plot0x,plot0y,5)
 # print("xPlotLengh",len(plot0x))
 # print("yPlotLength",len(plot0y))
-printPlot(plot0x,plot0y)
+# printPlot(plot0x,plot0y)
 # print(plot0x)
 # print(plot0y)
